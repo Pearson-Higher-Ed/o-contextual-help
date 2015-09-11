@@ -1,0 +1,13 @@
+////
+/// @group o-contextual-help
+/// @link http://registry.origami.ft.com/components/o-contextual-help
+////
+
+/// Hello world
+///
+/// @param {String} $who [world]
+@mixin oContextualHelpHello($who: world) {
+	.foo {
+		content: 'Hello, #{$who}!';
+	}
+}

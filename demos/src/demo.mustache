@@ -1,0 +1,101 @@
+<p> Check the page source for a demonstration of using the config for adding help items </p>
+
+<script type="application/json" data-o-contextual-help-config>
+  {
+    "helpTopics": [
+      "console/student/freetrial",
+      "console/student/studentresources",
+      "console/student/contactsupport"
+    ]
+  }
+</script>
+<script>
+  function getAndConsoleLogHelp(){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    console.log(help);
+  }
+
+  function openSpecificArticle(topic){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    help.openHelpTopic(topic);
+  }
+
+  function issueHelpClickFromHeader(){
+    var el = document.querySelector('.o-app-header');
+    // now make it emit and oAppHeader.help.toggle
+    if(document.createEvent && el.dispatchEvent){
+      var evt = document.createEvent('Event');
+      evt.initEvent('oAppHeader.help.toggle', true, true)
+      el.dispatchEvent(evt);
+    }
+  }
+
+  function openThenAddATopicsAfterTime(topics, delay){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    help.open();
+    setTimeout(function(){
+      help.addTopics(topics)
+    }, delay);
+  }
+
+  function openThenRemoveTopics(topics, delay){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    help.open();
+    setTimeout(function(){
+      help.removeTopics(topics)
+    }, delay);
+  }
+
+  function openThenRemoveAll(){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    help.open();
+    setTimeout(function(){
+      help.removeAllTopics()
+    }, 500);
+  }
+
+  function openAndRandomSort(){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    help.open();
+    function rndSort(){
+      var ts = help.getTopics();
+      ts.sort(function(){
+        return Math.floor(Math.random()*3) - 1;
+      });
+      help.removeAllTopics();
+      help.addTopics(ts);
+    }
+    setTimeout(function(){
+      setInterval(rndSort, 1000);
+    }, 500);
+  }
+</script>
+
+<header class="o-app-header"></header>
+
+<a href="#o-contextual-help-drawer" data-toggle="o-drawer">Toggle Help Drawer (direct)</a>
+<br/>
+<a href="#" onclick="issueHelpClickFromHeader()">Trigger Help via Header Menu Item Click (simulated here)</a>
+<br/>
+<a href="#" onclick="issueHelpClickFromHeader()">Trigger Help via Header Menu Item Click (simulated here)</a>
+
+
+<br/><br/>
+
+<a href="#" onclick="getAndConsoleLogHelp()">console.log() the Help object</a>
+<br/>
+<a href="#" onclick="openSpecificArticle('console/student/droppedcourse')">Open Specific Article (Dropped Course)</a>
+
+<br/><br/>
+
+<a href="#" onclick="openThenAddATopicsAfterTime('console/instructor/courseregsettings', 1000)">Open, then add item after 1s (adds 'console/instructor/courseregsettings')</a>
+<br/>
+<a href="#" onclick="openThenAddATopicsAfterTime(['console/instructor/educatorresources', 'console/instructor/validatedinstructor'], 500)">Open, add multiple items after 500ms (adds 'console/instructor/educatorresources', 'console/instructor/validatedinstructor')</a>
+<br/>
+<a href="#" onclick="openThenRemoveTopics(['console/instructor/educatorresources', 'console/instructor/validatedinstructor'], 500)">Open, remove multiple items after 500ms (removes 'console/instructor/educatorresources', 'console/instructor/validatedinstructor')</a>
+<br/>
+<a href="#" onclick="openThenRemoveAll()">Open, then remove all topics.</a>
+
+<br/><br/>
+
+<a href="#" onclick="openAndRandomSort()">Open, then sort topics randomly</a>

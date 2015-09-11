@@ -1,0 +1,16 @@
+{
+    "name": "o-contextual-help",
+    "version": "0.1.0",
+    "description": "Contextual Help - Utilizes the drawer and binds in the content by name.  Uses a solo config.",
+    "origamiType": "module",
+    "origamiVersion": 1,
+    "support": "https://github.com/Financial-Times/o-contextual-help/issues",
+    "supportStatus": "experimental",
+    "demos": [
+        {
+            "path": "/demos/demo.html",
+            "expanded": true,
+            "description": ""
+        }
+    ]
+}

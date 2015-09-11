@@ -1,0 +1,19 @@
+{
+  "name": "o-contextual-help",
+  "dependencies": {
+    "o-drawer": "~1.0.0",
+    "o-fonts": "~0.2.0",
+    "o-he-xhr": "o-xhr#*",
+    "o-icons": "~0.0.2",
+    "o-xhr": "*"
+  },
+  "main": [
+    "main.scss",
+    "main.js"
+  ],
+  "ignore": [
+    "examples",
+    "test",
+    ".gitignore"
+  ]
+}
