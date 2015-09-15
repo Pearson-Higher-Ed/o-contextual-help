@@ -16,8 +16,8 @@ $o-fonts-is-silent: false;
 $drawer-borders: solid 1px #e8e8e8;
 
 .o-contextual-help-drawer {
-	background: #fff;
-	color: #333;
+	background: #ffffff;
+	color: #333333;
 	font-size: 16px;
 	font-family: oFontsGetFontFamilyWithFallbacks(HelveticaNeue);
 	a {
@@ -25,7 +25,7 @@ $drawer-borders: solid 1px #e8e8e8;
 		text-decoration: none;
 	}
 	.o-contextual-help-topics,
-	.o-contextual-help-topic-content{
+	.o-contextual-help-topic-content {
 		height: 100%;
 		width: 100%;
 		position: absolute;
@@ -35,33 +35,25 @@ $drawer-borders: solid 1px #e8e8e8;
 		overflow-x: hidden;
 		overflow-y: auto;
 		box-sizing: border-box;
-		-webkit-transition: all 0.4s ease;
-		-moz-transition: all 0.4s ease;
-		-o-transition: all 0.4s ease;
 		transition: all 0.4s ease;
-		-webkit-touch-callout: none;
-		-webkit-user-select: none;
-		-khtml-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
 		user-select: none;
 	}
-	.o-contextual-help-topic-content{
+	.o-contextual-help-topic-content {
 		left: 100%;
-		ul{
+		ul {
 			padding-left: 40px;
 		}
-		.help-header{
+		.help-header {
 			display: none;
 		}
 	}
-	&.show-content{
-		.o-contextual-help-topics{
+	&.show-content {
+		.o-contextual-help-topics {
 			left: -100%;
 		}
-		.o-contextual-help-topic-content{
+		.o-contextual-help-topic-content {
 			left: 0px;
-			.help-header{
+			.help-header {
 				display: block;
 			}
 		}
@@ -69,18 +61,18 @@ $drawer-borders: solid 1px #e8e8e8;
 	.help-header {
 		padding: 19px;
 		border-bottom: $drawer-borders;
-		a i.close-x{
-			color: #333;
+		a .close-x {
+			color: #333333;
 		}
 	}
 	.help-topic {
 		padding: 10px 19px;
 		border-bottom: $drawer-borders;
 		display: block;
-		&.excerpt p{
+		&.excerpt p {
 			height: 3em;
 			overflow: hidden;
-			&:after{
+			&:after {
 				content: '\02026';
 			}
 		}
@@ -104,8 +96,4 @@ $drawer-borders: solid 1px #e8e8e8;
 		right: -100%;
 		z-index: 1;
 	}
-}
-
-@if not $o-contextual-help-is-silent {
-	@include oContextualHelpHello(world of Origami);
 }

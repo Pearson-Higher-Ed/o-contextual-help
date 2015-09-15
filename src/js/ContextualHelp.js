@@ -1,210 +1,209 @@
-
 'use strict';
 
 var XHR = require('o-xhr');
 
 // setup templates
 var helpTemplate = requireText('../html/helpT.html'),
-  topicExcerptTemplate = requireText('../html/excerptT.html'),
-  topicTemplate = requireText('../html/contentT.html');
+	topicExcerptTemplate = requireText('../html/excerptT.html'),
+	topicTemplate = requireText('../html/contentT.html');
 
 
 function ContextualHelp(el){
 
-  var me = this,
-    baseURL = 'https://raw.githubusercontent.com/Pearson-Higher-Ed/help-content/master/out/';
+	var me = this,
+		baseURL = 'https://raw.githubusercontent.com/Pearson-Higher-Ed/help-content/master/out/';
 
-  function getConfig(){
-    var conf = {},
-      configEl = document.querySelector('[data-o-contextual-help-config]');
-    if (!configEl){
-      return conf;
-    }
-    try{
-      conf = JSON.parse(configEl.textContent);
-    }
-    catch(e){
-      conf = {};
-      throw new Error('Unable to parse configuration object: invalid JSON');
-    }
-    return conf;
-  }
+	function getConfig(){
+		var conf = {},
+			configEl = document.querySelector('[data-o-contextual-help-config]');
+		if (!configEl){
+			return conf;
+		}
+		try{
+			conf = JSON.parse(configEl.textContent);
+		}
+		catch(e){
+			conf = {};
+			throw new Error('Unable to parse configuration object: invalid JSON');
+		}
+		return conf;
+	}
 
-  this.fetchHelpContent = function(contentId, cb){
-    cb = cb || function(){};
-    if(me.cache && me.cache[contentId]){
-      cb(null, me.cache[contentId]);
-      return;
-    }
-    // get it from github
-    XHR({
-      url: baseURL + '/' + me.lang + '/' + contentId + '.json',
-      onComplete: function (res){
-        var data = JSON.parse(res);
-        // if found, stick in cache
-        me.cache[contentId] = data;
-        // return in cb(null, content)
-        cb(null, data);
-      },
-      onError: function (res) {
-        // retry as en-us
-        if(me.lang !== me.defaultLang){
-          var tempLang = me.defaultLang;
-          XHR({
-            url: baseURL + '/' + tempLang + '/' + contentId + '.json',
-            onComplete: function(res2){
-              var data = JSON.parse(res2);
-              me.cache[contentId] = data;
-              cb(null, data);
-            },
-            onError: function(err){
-              cb(err);
-            }
-          });
-        }
-        else{
-          cb(res);
-        }
-      }
-    });
-  };
+	this.fetchHelpContent = function(contentId, cb){
+		cb = cb || function(){};
+		if(me.cache && me.cache[contentId]){
+			cb(null, me.cache[contentId]);
+			return;
+		}
+		// get it from github
+		XHR({
+			url: baseURL + '/' + me.lang + '/' + contentId + '.json',
+			onComplete: function (res){
+				var data = JSON.parse(res);
+				// if found, stick in cache
+				me.cache[contentId] = data;
+				// return in cb(null, content)
+				cb(null, data);
+			},
+			onError: function (res) {
+				// retry as en-us
+				if(me.lang !== me.defaultLang){
+					var tempLang = me.defaultLang;
+					XHR({
+						url: baseURL + '/' + tempLang + '/' + contentId + '.json',
+						onComplete: function(res2){
+							var data = JSON.parse(res2);
+							me.cache[contentId] = data;
+							cb(null, data);
+						},
+						onError: function(err){
+							cb(err);
+						}
+					});
+				}
+				else{
+					cb(res);
+				}
+			}
+		});
+	};
 
-  this.defaultLang = 'en-us';
-  this.lang = this.defaultLang;
-  // figure out what el is and go get it if necessary
-  if(el instanceof String){
-    el = document.querySelector('#'+el);
-  }
+	this.defaultLang = 'en-us';
+	this.lang = this.defaultLang;
+	// figure out what el is and go get it if necessary
+	if(el instanceof String){
+		el = document.querySelector('#'+el);
+	}
 
-  this._el = el;
-  // init content cache
-  this.cache = {};
+	this._el = el;
+	// init content cache
+	this.cache = {};
 
-  // init topics list
-  this.topics = [];
+	// init topics list
+	this.topics = [];
 
 
-  // add templates to target el
-  if(el.nodeType){
-    el.innerHTML = helpTemplate;
-  }
-  // add event helpers for inner templates
-  el.querySelector('#contextual-help-close-content').onclick = function(){
-    me._el.classList.remove('show-content');
-    return false;
-  };
-  // establish configuration
-  var conf = getConfig();
-  if(conf && conf.helpTopics && conf.helpTopics.length > 0){
-    this.topics = conf.helpTopics;
-  }
-  // populate excerpts into topic list
-  this.populateFromList = function(list, cb){
-    cb = cb || function(){};
-    var item = list.splice(0,1);
-    me.fetchHelpContent(item, function(err, cData){
-      var nExcerpt = document.createElement('div');
-      nExcerpt.innerHTML = topicExcerptTemplate;
-      var title = nExcerpt.querySelector('h4 a');
-      title.innerHTML = cData.title;
-      title.onclick = function(){
-        me.openHelpTopic(item);
-      };
-      nExcerpt.querySelector('p').innerHTML = cData.excerpt;
-      me._el.querySelector('.help-topics-excerpt-list').appendChild(nExcerpt);
-      if(list.length > 0){
-        me.populateFromList(list, cb);
-      }
-    });
-  };
+	// add templates to target el
+	if(el.nodeType){
+		el.innerHTML = helpTemplate;
+	}
+	// add event helpers for inner templates
+	el.querySelector('#contextual-help-close-content').onclick = function(){
+		me._el.classList.remove('show-content');
+		return false;
+	};
+	// establish configuration
+	var conf = getConfig();
+	if(conf && conf.helpTopics && conf.helpTopics.length > 0){
+		this.topics = conf.helpTopics;
+	}
+	// populate excerpts into topic list
+	this.populateFromList = function(list, cb){
+		cb = cb || function(){};
+		var item = list.splice(0,1);
+		me.fetchHelpContent(item, function(err, cData){
+			var nExcerpt = document.createElement('div');
+			nExcerpt.innerHTML = topicExcerptTemplate;
+			var title = nExcerpt.querySelector('h4 a');
+			title.innerHTML = cData.title;
+			title.onclick = function(){
+				me.openHelpTopic(item);
+			};
+			nExcerpt.querySelector('p').innerHTML = cData.excerpt;
+			me._el.querySelector('.help-topics-excerpt-list').appendChild(nExcerpt);
+			if(list.length > 0){
+				me.populateFromList(list, cb);
+			}
+		});
+	};
 
-  this.init = function(){
+	this.init = function(){
 
-    // remove everything
-    this._el.querySelector('.help-topics-excerpt-list').innerHTML = '';
-    // populate from list
-    var theList = this.topics.slice(0);
-    this.populateFromList(theList);
-  };
+		// remove everything
+		this._el.querySelector('.help-topics-excerpt-list').innerHTML = '';
+		// populate from list
+		var theList = this.topics.slice(0);
+		this.populateFromList(theList);
+	};
 
-  // bind header event for show / hide
-  var eventEl = document.querySelector('header.o-app-header');
-  if(eventEl){
-    eventEl.addEventListener('oAppHeader.help.toggle', function(){
-      if(me.toggle){ me.toggle(); }
-    });
-  }
+	// bind header event for show / hide
+	var eventEl = document.querySelector('header.o-app-header');
+	if(eventEl){
+		eventEl.addEventListener('oAppHeader.help.toggle', function(){
+			if(me.toggle){ me.toggle(); }
+		});
+	}
 
-  this.init();
-  this._el.oContextualHelp = this;
-  return this;
+	this.init();
+	this._el.oContextualHelp = this;
+	return this;
 }
 
 ContextualHelp.prototype.setLanguage = function(langCode){
-  this.lang = langCode;
-  this._el.classList.add('show-content');
+	this.lang = langCode;
+	this._el.classList.add('show-content');
 };
 
 ContextualHelp.prototype.openHelpTopic = function(topic){
 
-  var contentTarget = this._el.querySelector('#o-contextual-help-topic-content-target');
-  if(!topic){
-    contentTarget.innerHTML = '';
-  }
-  // fetch it and put the content in the content target
-  this.fetchHelpContent(topic, function(err, cData){
-    contentTarget.innerHTML = topicTemplate;
-    contentTarget.querySelector('h4').innerHTML = cData.title;
-    contentTarget.querySelector('div').innerHTML = cData.content;
-  });
-  this._el.classList.add('show-content');
-  if(this.open){
-    this.open();
-  }
+	var contentTarget = this._el.querySelector('#o-contextual-help-topic-content-target');
+	if(!topic){
+		contentTarget.innerHTML = '';
+	}
+	// fetch it and put the content in the content target
+	this.fetchHelpContent(topic, function(err, cData){
+		contentTarget.innerHTML = topicTemplate;
+		contentTarget.querySelector('h4').innerHTML = cData.title;
+		contentTarget.querySelector('div').innerHTML = cData.content;
+	});
+	this._el.classList.add('show-content');
+	if(this.open){
+		this.open();
+	}
 };
 
 /*
-  takes string topic or array of strings
-  adds these topics to the topic list
+	takes string topic or array of strings
+	adds these topics to the topic list
 */
 ContextualHelp.prototype.addTopics = function(topic){
-  if(typeof topic === 'string'){
-    topic = [topic];
-  }
-  for(var i=0, l=topic.length; i<l; i++){
-    var t = topic[i];
-    if(this.topics.indexOf(t) < 0){
-      this.topics.push(t);
-    }
-  }
-  this.init();
+	if(typeof topic === 'string'){
+		topic = [topic];
+	}
+	for(var i=0, l=topic.length; i<l; i++){
+		var t = topic[i];
+		if(this.topics.indexOf(t) < 0){
+			this.topics.push(t);
+		}
+	}
+	this.init();
 };
 ContextualHelp.prototype.removeTopics = function(topic){
-  if(typeof topic === 'string'){
-    topic = [topic];
-  }
-  for(var i=0, l=topic.length; i<l; i++){
-    var t = topic[i];
-    if(this.topics.indexOf(t) >= 1){
-      this.topics.splice(this.topics.indexOf(t), 1);
-    }
-  }
-  this.init();
+	if(typeof topic === 'string'){
+		topic = [topic];
+	}
+	for(var i=0, l=topic.length; i<l; i++){
+		var t = topic[i];
+		if(this.topics.indexOf(t) >= 1){
+			this.topics.splice(this.topics.indexOf(t), 1);
+		}
+	}
+	this.init();
 };
 
 /*
 removes all topics from current config
 */
 ContextualHelp.prototype.removeAllTopics = function(){
-  this.topics = [];
-  this.init();
+	this.topics = [];
+	this.init();
 };
 
 /*
-  returns list of all topics corruntly in use
+	returns list of all topics corruntly in use
 */
 ContextualHelp.prototype.getTopics = function(){
-  return this.topics;
+	return this.topics;
 };
 
 module.exports = ContextualHelp;

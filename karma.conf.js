@@ -46,7 +46,7 @@ module.exports = function(config) {
 					ignore: ['node_modules/**', 'test/**']
 				}),
 				require('textrequireify').create({
-					rootDirectory: process.cwd()
+					rootDirectory: './'
 				})]
 		},
 
