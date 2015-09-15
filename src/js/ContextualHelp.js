@@ -17,7 +17,6 @@ function ContextualHelp(el){
   function getConfig(){
     var conf = {},
       configEl = document.querySelector('[data-o-contextual-help-config]');
-      console.log('configEl=', configEl)
     if (!configEl){
       return conf;
     }
@@ -96,7 +95,6 @@ function ContextualHelp(el){
   };
   // establish configuration
   var conf = getConfig();
-  console.log('conf=', conf);
   if(conf && conf.helpTopics && conf.helpTopics.length > 0){
     this.topics = conf.helpTopics;
   }

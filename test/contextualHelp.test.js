@@ -66,10 +66,10 @@ describe('ContextualHelp direct loader', function() {
 			title: 'test content',
 			excerpt: 'lorem ipsum',
 			content: '<p>Lorem Ipsum dolar sit amet.</p>'
-		}
+		};
 		ch.cache = {
 			test: testCache
-		}
+		};
 		ch.openHelpTopic('test');
 		var titleText = document.querySelector('#o-contextual-help-topic-content-target h4').innerText;
 		expect(titleText).to.be(testCache.title);
