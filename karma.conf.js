@@ -1,4 +1,4 @@
-/*global module*/
+/*global module, process */
 'use strict';
 
 module.exports = function(config) {
@@ -46,7 +46,7 @@ module.exports = function(config) {
 					ignore: ['node_modules/**', 'test/**']
 				}),
 				require('textrequireify').create({
-					rootDirectory: './'
+					rootDirectory: process.cwd()
 				})]
 		},
 

@@ -1,14 +1,11 @@
 // External imports
-
-// @import 'o-grid/main';
+@import 'o-drawer/main';
+@import 'o-icons/main';
+@import 'o-fonts/main';
 
 // Internal imports
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
-
-@import 'o-drawer/main';
-@import 'o-icons/main';
-@import 'o-fonts/main';
 
 $drawer-borders: solid 1px #e8e8e8;
 
