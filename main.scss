@@ -6,10 +6,6 @@
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
 
-$o-contextual-help-is-silent: false !default;
-$o-icons-is-silent: $o-contextual-help-is-silent;
-$o-fonts-is-silent: $o-contextual-help-is-silent;
-
 @import 'o-drawer/main';
 @import 'o-icons/main';
 @import 'o-fonts/main';
