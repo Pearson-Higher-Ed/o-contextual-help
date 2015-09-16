@@ -1,43 +1,82 @@
-# o-contextual-help
+# o-contextual-help [![Build Status](https://travis-ci.org/Pearson-Higher-Ed/o-contextual-help.svg?branch=master)](https://travis-ci.org/Pearson-Higher-Ed/o-contextual-help) [![Coverage Status](https://coveralls.io/repos/Pearson-Higher-Ed/o-contextual-help/badge.svg?branch=master&service=github)](https://coveralls.io/github/Pearson-Higher-Ed/o-contextual-help?branch=master)
 
-**Note:** This is not a usable Origami component.
+## Quick start
+This module will automatically inject and initialize itself on the page, as a new o-drawer with an ID of 'o-contextual-help-drawer'.  The object itself will then be added on to the same element as .oContextualHelp.  So, to access the object after it's initialized, simply use the following.
 
-Project structure for new Origami components.
+```js
+document.getElementById('o-contextual-help-drawer').oContextualHelp;
+```
 
-### Creating a new Origami Module
+## API
 
-1. Clone this repository into a new folder:
+O-contextual-help inherits most of it's API from o-drawer.  The 'open', 'close', and 'toggle' methods are for convenience, and literally call the drawer's respective methods on your behalf.
 
-  ```
-  git clone https://github.com/Financial-Times/o-contextual-help.git o-your-component
-  ```
-2. Search `o-contextual-help` and replace with `o-your-component`:
+### Methods
 
-  ```
-  find . -name '*.*' -type f -print -exec sed -i '' 's/o-contextual-help/o-your-component/g' {} \;
-  ```
-3. Search `oContextualHelp` and replace with `oYourComponent`:
+`open()`
 
-  ```
-  find . -name '*.*' -type f -print -exec sed -i '' 's/oContextualHelp/oYourComponent/g' {} \;
-  ```
-4. Re-name the component in the description field of `origami.json`
+calls Drawer.open()
 
-### Deploying for the first time
+`close()`
 
-1. Create a new repository (tipically: on GitHub)
-2. Delete the existing Git directory: `rm -Rf .git`
-3. Initialise a new local Git repository: `git init .`
-4. Add the remote repository:
+calls Drawer.close()
 
-  ```
-  git remote add origin https://github.com/Financial-Times/o-your-component.git
-  ```
-5. Test and verify: `obt test && obt verify` (and fix the code raising errors)
-6. Commit and push: `git add . && git commit -m "Initial commit" && git push origin master`
+`toggle()`
 
-----
+calls Drawer.toggle()
 
-## Licence
+`setLanguage(langCode)`
 
-This software is published by the Financial Times under the [MIT licence](http://opensource.org/licenses/MIT).
+Sets the internal member variable for use in fetching content.  Default is 'en-us';
+
+`openHelpTopic(topicId)`
+
+Directly opens the help contents to a specific topic.  This will bypass the list and is also used internally to go from the help topic list to the help topic contents.
+
+`addTopics(topic || [topic, topic, ...])`
+
+Add a topic or topics to the internal array of topics to display in the list.
+
+`removeTopics(topic || [topic, topic, ...])`
+
+Remove a topic or topics to the internal array of topics to display in the list.
+
+`removeAllTopics()`
+
+Empty the internal help topic array.
+
+`getTopics()`
+
+Returns the internal help topic array.
+
+### Events
+
+| Event Name							 | Description																				 |
+|--------------------------|-----------------------------------------------------|
+| oDrawer.open						 | Fires immediately when the `open` method is called. |
+| oDrawer.close						| Fires immediately when the `close` method is called. |
+
+
+```js
+document.getElementById('o-contextual-help-drawer').addEventListener('oDrawer.open', function (e) {
+  // Do something
+});
+```
+
+## Accessibility
+
+The module will automatically update `aria-expanded` depending on the state of the target element.
+
+## Browser support
+
+Tested and working on:
+
+|	Browser	   | Versions								 |
+|:----------:|:-----------------------:|
+|	 Chrome	   |	 36+							  	 |
+|	 Firefox	 |	 30+									 |
+|	 IE			   |	 11+, 10							 |
+
+## License
+
+This software is published by Pearson Education under the [MIT license](LICENSE).
