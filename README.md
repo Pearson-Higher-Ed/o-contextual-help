@@ -67,16 +67,6 @@ document.getElementById('o-contextual-help-drawer').addEventListener('oDrawer.op
 
 The module will automatically update `aria-expanded` depending on the state of the target element.
 
-## Browser support
-
-Tested and working on:
-
-|	Browser	   | Versions								 |
-|:----------:|:-----------------------:|
-|	 Chrome	   |	 36+							  	 |
-|	 Firefox	 |	 30+									 |
-|	 IE			   |	 11+, 10							 |
-
 ## License
 
 This software is published by Pearson Education under the [MIT license](LICENSE).
