@@ -31,13 +31,16 @@ function ContextualHelp(el){
 
 	this.fetchHelpContent = function(contentId, cb){
 		cb = cb || function(){};
+		if(contentId.replace(/\s/,'') == ''){
+			cb("no content ID issued")
+		}
 		if(me.cache && me.cache[contentId]){
 			cb(null, me.cache[contentId]);
 			return;
 		}
 		// get it from github
 		XHR({
-			url: baseURL + '/' + me.lang + '/' + contentId + '.json',
+			url: baseURL + me.lang + '/' + contentId + '.json',
 			onComplete: function (res){
 				var data = JSON.parse(res);
 				// if found, stick in cache
@@ -100,21 +103,28 @@ function ContextualHelp(el){
 	// populate excerpts into topic list
 	this.populateFromList = function(list, cb){
 		cb = cb || function(){};
-		var item = list.splice(0,1);
-		me.fetchHelpContent(item, function(err, cData){
-			var nExcerpt = document.createElement('div');
-			nExcerpt.innerHTML = topicExcerptTemplate;
-			var title = nExcerpt.querySelector('h4 a');
-			title.innerHTML = cData.title;
-			title.onclick = function(){
-				me.openHelpTopic(item);
-			};
-			nExcerpt.querySelector('p').innerHTML = cData.excerpt;
-			me._el.querySelector('.help-topics-excerpt-list').appendChild(nExcerpt);
-			if(list.length > 0){
-				me.populateFromList(list, cb);
-			}
-		});
+		if(list.length > 0){
+			var item = list.splice(0,1)[0];
+			me.fetchHelpContent(item, function(err, cData){
+				if(!cData || err){
+					if(list.length > 0){
+						me.populateFromList(list, cb);
+					}
+				}
+				var nExcerpt = document.createElement('div');
+				nExcerpt.innerHTML = topicExcerptTemplate;
+				var title = nExcerpt.querySelector('h4 a');
+				title.innerHTML = cData.title;
+				title.onclick = function(){
+					me.openHelpTopic(item);
+				};
+				nExcerpt.querySelector('p').innerHTML = cData.excerpt;
+				me._el.querySelector('.help-topics-excerpt-list').appendChild(nExcerpt);
+				if(list.length > 0){
+					me.populateFromList(list, cb);
+				}
+			});
+		}
 	};
 
 	this.init = function(){

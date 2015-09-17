@@ -55,6 +55,9 @@
   }
 
   function openAndRandomSort(){
+    if(window.loop){
+      clearInterval(window.loop);
+    }
     var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
     help.open();
     function rndSort(){
@@ -66,8 +69,11 @@
       help.addTopics(ts);
     }
     setTimeout(function(){
-      setInterval(rndSort, 1000);
+      window.loop = setInterval(rndSort, 300);
     }, 500);
+    setTimeout(function(){
+      clearInterval(window.loop);
+    }, 5500);
   }
 </script>
 
@@ -77,7 +83,7 @@
 <br/>
 <a href="#" onclick="issueHelpClickFromHeader()">Trigger Help via Header Menu Item Click (simulated here)</a>
 <br/>
-<a href="#" onclick="issueHelpClickFromHeader()">Trigger Help via Header Menu Item Click (simulated here)</a>
+<a  href="#o-contextual-help-drawer" data-open="o-drawer">Open via Drawer</a>
 
 
 <br/><br/>
@@ -98,4 +104,4 @@
 
 <br/><br/>
 
-<a href="#" onclick="openAndRandomSort()">Open, then sort topics randomly</a>
+<a href="#" onclick="openAndRandomSort()">Open, then sort topics randomly for 5 seconds</a>
