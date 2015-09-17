@@ -89,7 +89,7 @@ function ContextualHelp(el){
 	}
 	// add event helpers for inner templates
 	el.querySelector('#contextual-help-close-content').onclick = function(){
-		me._el.classList.remove('show-content');
+		me._el.classList.remove('o-contextual-help__detail--visible');
 		return false;
 	};
 	// establish configuration
@@ -110,7 +110,7 @@ function ContextualHelp(el){
 				me.openHelpTopic(item);
 			};
 			nExcerpt.querySelector('p').innerHTML = cData.excerpt;
-			me._el.querySelector('.help-topics-excerpt-list').appendChild(nExcerpt);
+			me._el.querySelector('.o-contextual-help__excerpt-list').appendChild(nExcerpt);
 			if(list.length > 0){
 				me.populateFromList(list, cb);
 			}
@@ -120,7 +120,7 @@ function ContextualHelp(el){
 	this.init = function(){
 
 		// remove everything
-		this._el.querySelector('.help-topics-excerpt-list').innerHTML = '';
+		this._el.querySelector('.o-contextual-help__excerpt-list').innerHTML = '';
 		// populate from list
 		var theList = this.topics.slice(0);
 		this.populateFromList(theList);
@@ -141,7 +141,7 @@ function ContextualHelp(el){
 
 ContextualHelp.prototype.setLanguage = function(langCode){
 	this.lang = langCode;
-	this._el.classList.add('show-content');
+	this._el.classList.add('o-contextual-help__detail--visible');
 };
 
 ContextualHelp.prototype.openHelpTopic = function(topic){
@@ -156,7 +156,7 @@ ContextualHelp.prototype.openHelpTopic = function(topic){
 		contentTarget.querySelector('h4').innerHTML = cData.title;
 		contentTarget.querySelector('div').innerHTML = cData.content;
 	});
-	this._el.classList.add('show-content');
+	this._el.classList.add('o-contextual-help__detail--visible');
 	if(this.open){
 		this.open();
 	}
