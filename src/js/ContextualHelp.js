@@ -31,8 +31,8 @@ function ContextualHelp(el){
 
 	this.fetchHelpContent = function(contentId, cb){
 		cb = cb || function(){};
-		if(contentId.replace(/\s/,'') == ''){
-			cb("no content ID issued")
+		if(contentId.replace(/\s/,'') === ''){
+			cb("no content ID issued");
 		}
 		if(me.cache && me.cache[contentId]){
 			cb(null, me.cache[contentId]);
