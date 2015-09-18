@@ -1,15 +1,17 @@
 // External imports
 @import 'o-drawer/main';
-@import 'o-icons/main';
 @import 'o-fonts/main';
+@import 'o-icons/main';
 
 // Internal imports
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
 
+@include oIconsInclude(oc-icons);
+
 $drawer-borders: solid 1px #e8e8e8;
 
-.o-contextual-help-drawer {
+.o-contextual-help__drawer {
 	background: #ffffff;
 	color: #333333;
 	font-size: 16px;
@@ -18,76 +20,77 @@ $drawer-borders: solid 1px #e8e8e8;
 		color: #0381c9;
 		text-decoration: none;
 	}
-	.o-contextual-help-topics,
-	.o-contextual-help-topic-content {
-		height: 100%;
+
+	@media only screen and (max-width: 415px) {
 		width: 100%;
-		position: absolute;
-		top: 0px;
+		right: -100%;
+		z-index: 1;
+	}
+}
+
+.o-contextual-help__detail--visible {
+	.o-contextual-help__topics {
+		left: -100%;
+	}
+	.o-contextual-help__topic-content {
 		left: 0px;
-		padding-top: 48px;
-		overflow-x: hidden;
-		overflow-y: auto;
-		box-sizing: border-box;
-		transition: all 0.4s ease;
-		user-select: none;
-	}
-	.o-contextual-help-topic-content {
-		left: 100%;
-		ul {
-			padding-left: 40px;
-		}
-		.help-header {
-			display: none;
-		}
-	}
-	&.show-content {
-		.o-contextual-help-topics {
-			left: -100%;
-		}
-		.o-contextual-help-topic-content {
-			left: 0px;
-			.help-header {
-				display: block;
-			}
-		}
-	}
-	.help-header {
-		padding: 19px;
-		border-bottom: $drawer-borders;
-		a .close-x {
-			color: #333333;
-		}
-	}
-	.help-topic {
-		padding: 10px 19px;
-		border-bottom: $drawer-borders;
-		display: block;
-		&.excerpt p {
-			height: 3em;
-			overflow: hidden;
-			&:after {
-				content: '\02026';
-			}
-		}
-		h4 {
-			font-size: 18px;
-			line-height: 1.45em;
-			font-weight: normal;
-			margin-bottom: 6px;
-			margin-top: 6px;
-		}
-		p {
-			font-size: 0.9em;
-			line-height: 1.6em;
+		.o-contextual-help__header {
+			display: block;
 		}
 	}
 }
 
-@media only screen and (max-width: 415px) {
-	.o-contextual-help-drawer {
-		width: 100%;
-		right: -100%;
-		z-index: 1;
+.o-contextual-help__header {
+	padding: 19px;
+	border-bottom: $drawer-borders;
+}
+
+.o-contextual-help__topics,
+.o-contextual-help__topic-content {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	padding-top: 48px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	box-sizing: border-box;
+	transition: all 0.4s ease;
+	user-select: none;
+}
+
+.o-contextual-help__topic {
+	padding: 10px 19px;
+	border-bottom: $drawer-borders;
+	display: block;
+	h4 {
+		font-size: 18px;
+		line-height: 1.45em;
+		font-weight: normal;
+		margin-bottom: 6px;
+		margin-top: 6px;
+	}
+	p {
+		font-size: 0.9em;
+		line-height: 1.6em;
+	}
+}
+
+.o-contextual-help__topic-content {
+	left: 100%;
+	ul {
+		padding-left: 40px;
+	}
+	.o-contextual-help__header {
+		display: none;
+	}
+}
+
+.o-contextual-help__excerpt p {
+	height: 3em;
+	overflow: hidden;
+	&:after {
+		content: '\02026';
 	}
 }

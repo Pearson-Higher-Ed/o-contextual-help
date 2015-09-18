@@ -1,6 +1,23 @@
 # o-contextual-help [![Build Status](https://travis-ci.org/Pearson-Higher-Ed/o-contextual-help.svg?branch=master)](https://travis-ci.org/Pearson-Higher-Ed/o-contextual-help) [![Coverage Status](https://coveralls.io/repos/Pearson-Higher-Ed/o-contextual-help/badge.svg?branch=master&service=github)](https://coveralls.io/github/Pearson-Higher-Ed/o-contextual-help?branch=master)
 
 ## Quick start
+Start by adding a list of help topics to display, via configuration script element.
+
+```html
+<script type="application/json" data-o-contextual-help-config>
+  {
+    "helpTopics": [
+      "console/student/freetrial",
+      "console/student/studentresources",
+      "console/student/contactsupport"
+    ]
+  }
+</script>
+```
+This gives o-contextual-help something to load.  The topics list is presented in order and the values are derived from the path of the files at https://github.com/Pearson-Higher-Ed/help-content in the /out directory without the language code.  The language code can be set dynamically in this component and it's addition to the fetch URL is managed for you.
+
+Do not include the filename extension in the list of configured topics.
+
 This module will automatically inject and initialize itself on the page, as a new o-drawer with an ID of 'o-contextual-help-drawer'.  The object itself will then be added on to the same element as .oContextualHelp.  So, to access the object after it's initialized, simply use the following.
 
 ```js
