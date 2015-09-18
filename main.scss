@@ -10,12 +10,14 @@
 @include oIconsInclude(oc-icons);
 
 $drawer-borders: solid 1px #e8e8e8;
+$q-contextual-help-z-index: 995;
 
 .o-contextual-help__drawer {
 	background: #ffffff;
 	color: #333333;
 	font-size: 16px;
 	font-family: oFontsGetFontFamilyWithFallbacks(HelveticaNeue);
+	z-index: $q-contextual-help-z-index;
 	a {
 		color: #0381c9;
 		text-decoration: none;
@@ -24,7 +26,7 @@ $drawer-borders: solid 1px #e8e8e8;
 	@media only screen and (max-width: 415px) {
 		width: 100%;
 		right: -100%;
-		z-index: 1;
+
 	}
 }
 
