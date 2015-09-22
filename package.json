@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "babelify": "^5.0.4",
+    "browserify": "^11.1.0",
     "browserify-istanbul": "^0.2.1",
     "coveralls": "^2.11.4",
     "debowerify": "Financial-Times/debowerify",
@@ -16,10 +17,7 @@
     "karma-coverage": "^0.2.6",
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
-    "mocha": "^2.1.0"
-  },
-  "dependencies": {
-    "browserify": "^11.1.0",
+    "mocha": "^2.1.0",
     "textrequireify": "^2.1.1"
   }
 }
