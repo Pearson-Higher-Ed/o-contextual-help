@@ -1,7 +1,7 @@
 {
   "registry": {
     "search": [
-      "https://origami-dev.pearsoned.com/registry",
+      "https://origami.pearsoned.com/registry",
       "http://registry.origami.ft.com",
       "https://bower.herokuapp.com"
     ]
