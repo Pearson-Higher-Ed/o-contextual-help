@@ -41,31 +41,31 @@ function ContextualHelp(el){
 		// get it from github
 		XHR({
 			url: baseURL + me.lang + '/' + contentId + '.json',
-			onComplete: function (res){
-				var data = JSON.parse(res);
+			onSuccess: function (req){
+				var data = JSON.parse(req.responseText);
 				// if found, stick in cache
 				me.cache[contentId] = data;
 				// return in cb(null, content)
 				cb(null, data);
 			},
-			onError: function (res) {
+			onError: function (req) {
 				// retry as en-us
 				if(me.lang !== me.defaultLang){
 					var tempLang = me.defaultLang;
 					XHR({
 						url: baseURL + '/' + tempLang + '/' + contentId + '.json',
-						onComplete: function(res2){
-							var data = JSON.parse(res2);
+						onSuccess: function(reqInner){
+							var data = JSON.parse(reqInner.responseText);
 							me.cache[contentId] = data;
 							cb(null, data);
 						},
-						onError: function(err){
-							cb(err);
+						onError: function(reqInner){
+							cb(reqInner);
 						}
 					});
 				}
 				else{
-					cb(res);
+					cb(req);
 				}
 			}
 		});
