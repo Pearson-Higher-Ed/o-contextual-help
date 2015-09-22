@@ -26,25 +26,23 @@ document.getElementById('o-contextual-help-drawer').oContextualHelp;
 
 ## API
 
-O-contextual-help inherits most of it's API from o-drawer.  The 'open', 'close', and 'toggle' methods are for convenience, and literally call the drawer's respective methods on your behalf.
-
 ### Methods
 
 `open()`
 
-calls Drawer.open()
+Opens the drawer.
 
 `close()`
 
-calls Drawer.close()
+Closes the drawer.
 
 `toggle()`
 
-calls Drawer.toggle()
+Toggles the current state of the drawer.
 
 `setLanguage(langCode)`
 
-Sets the internal member variable for use in fetching content.  Default is 'en-us';
+Sets the internal member variable for use in fetching content.  Default is 'en-us'.
 
 `openHelpTopic(topicId)`
 
@@ -68,10 +66,7 @@ Returns the internal help topic array.
 
 ### Events
 
-| Event Name							 | Description																				 |
-|--------------------------|-----------------------------------------------------|
-| oDrawer.open						 | Fires immediately when the `open` method is called. |
-| oDrawer.close						| Fires immediately when the `close` method is called. |
+Refer to the [o-drawer](https://origami.pearsoned.com/registry/components/o-drawer) documentation for the supported events.
 
 
 ```js
