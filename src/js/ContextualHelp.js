@@ -1,7 +1,7 @@
 'use strict';
 
-var XHR = require('o-xhr'); //,
-	//Collapse = require('o-collapse');
+var XHR = require('o-xhr'),
+	Collapse = require('o-collapse');
 
 // setup templates
 var helpTemplate = requireText('../html/helpT.html'),
@@ -165,8 +165,9 @@ ContextualHelp.prototype.openHelpTopic = function(topic){
 	this.fetchHelpContent(topic, function(err, cData){
 		contentTarget.innerHTML = topicTemplate;
 		contentTarget.querySelector('h4').innerHTML = cData.title;
-		contentTarget.querySelector('div').innerHTML = cData.content;
-		//Collapse.init(contentTarget.querySelector('div'));
+		var contentCT = contentTarget.querySelector('div');
+		contentCT.innerHTML = cData.content;
+		Collapse.init(contentCT);
 	});
 	this._el.classList.add('o-contextual-help__detail--visible');
 	if(this.open){

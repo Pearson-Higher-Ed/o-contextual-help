@@ -2,6 +2,7 @@
 @import 'o-drawer/main';
 @import 'o-fonts/main';
 @import 'o-icons/main';
+@import 'o-collapse/main';
 
 // Internal imports
 @import 'src/scss/variables';
@@ -60,6 +61,35 @@ $q-contextual-help-z-index: 995;
 	box-sizing: border-box;
 	transition: all 0.4s ease;
 	user-select: none;
+	[data-toggle="o-collapse"] {
+		position: relative;
+		margin-left: 1em;
+		padding-left: 0.4em;
+		cursor: pointer;
+		$icon-width-height: 1em;
+		&:before, &:after {
+			background: #000;
+			content: "";
+			position: absolute;
+		}
+		&:before {
+			height: 0.2em;
+			width: 1em;
+			left: -1em;
+			top: 0.4em;
+		}
+		&:after {
+			height: 1em;
+			width: 0.2em;
+			left: -0.6em;
+			top: 0em
+		}
+		&[aria-expanded="true"] {
+			&:after {
+				display: none;
+			}
+		}
+	}
 }
 
 .o-contextual-help__topic {
