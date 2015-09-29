@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "o-contextual-help",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.1",
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },
