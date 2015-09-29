@@ -67,8 +67,9 @@ $q-contextual-help-z-index: 995;
 		padding-left: 0.4em;
 		cursor: pointer;
 		$icon-width-height: 1em;
-		&:before, &:after {
-			background: #000;
+		&:before,
+		&:after {
+			background: #000000;
 			content: "";
 			position: absolute;
 		}
@@ -82,12 +83,10 @@ $q-contextual-help-z-index: 995;
 			height: 1em;
 			width: 0.2em;
 			left: -0.6em;
-			top: 0em
+			top: 0em;
 		}
-		&[aria-expanded="true"] {
-			&:after {
-				display: none;
-			}
+		&[aria-expanded="true"]:after {
+			display: none;
 		}
 	}
 }

@@ -162,13 +162,21 @@ ContextualHelp.prototype.openHelpTopic = function(topic){
 		contentTarget.innerHTML = '';
 	}
 	// fetch it and put the content in the content target
-	this.fetchHelpContent(topic, function(err, cData){
-		contentTarget.innerHTML = topicTemplate;
-		contentTarget.querySelector('h4').innerHTML = cData.title;
-		var contentCT = contentTarget.querySelector('div');
-		contentCT.innerHTML = cData.content;
-		Collapse.init(contentCT);
-	});
+	if(topic){
+		this.fetchHelpContent(topic, function(err, cData){
+			if(err){
+				throw err;
+			}
+			if(!cData){
+				return;
+			}
+			contentTarget.innerHTML = topicTemplate;
+			contentTarget.querySelector('h4').innerHTML = cData.title;
+			var contentCT = contentTarget.querySelector('div');
+			contentCT.innerHTML = cData.content;
+			Collapse.init(contentCT);
+		});
+	}
 	this._el.classList.add('o-contextual-help__detail--visible');
 	if(this.open){
 		this.open();
@@ -197,7 +205,7 @@ ContextualHelp.prototype.removeTopics = function(topic){
 	}
 	for(var i=0, l=topic.length; i<l; i++){
 		var t = topic[i];
-		if(this.topics.indexOf(t) >= 1){
+		if(this.topics.indexOf(t) >= 0){
 			this.topics.splice(this.topics.indexOf(t), 1);
 		}
 	}
