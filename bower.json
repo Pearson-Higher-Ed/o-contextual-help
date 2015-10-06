@@ -5,7 +5,7 @@
     "o-fonts": "^1.0.0",
     "o-icons": "^1.0.0",
     "o-xhr": "^1.0.0",
-    "o-collapse": "~1.0.1"
+    "o-collapse": "^1.0.1"
   },
   "main": [
     "main.scss",
