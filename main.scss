@@ -10,15 +10,12 @@
 
 @include oIconsInclude(oc-icons);
 
-$drawer-borders: solid 1px #e8e8e8;
-$q-contextual-help-z-index: 995;
-
 .o-contextual-help__drawer {
 	background: #ffffff;
 	color: #333333;
 	font-size: 16px;
 	font-family: oFontsGetFontFamilyWithFallbacks(HelveticaNeue);
-	z-index: $q-contextual-help-z-index;
+	z-index: $o-contextual-help-z-index;
 	a {
 		color: #0381c9;
 		text-decoration: none;
@@ -45,7 +42,7 @@ $q-contextual-help-z-index: 995;
 
 .o-contextual-help__header {
 	padding: 19px;
-	border-bottom: $drawer-borders;
+	border-bottom: $o-contextual-help-separator-border;
 }
 
 .o-contextual-help__topics,
@@ -93,7 +90,7 @@ $q-contextual-help-z-index: 995;
 
 .o-contextual-help__topic {
 	padding: 10px 19px;
-	border-bottom: $drawer-borders;
+	border-bottom: $o-contextual-help-separator-border;
 	display: block;
 	h4 {
 		font-size: 18px;
