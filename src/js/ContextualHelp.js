@@ -1,66 +1,63 @@
-'use strict';
+const xhr = require('o-xhr');
+const Collapse = require('o-collapse');
 
-var XHR = require('o-xhr'),
-	Collapse = require('o-collapse');
+// Templates
+const helpTemplate = require('text!../html/helpT.html');
+const topicExcerptTemplate = require('text!../html/excerptT.html');
+const topicTemplate = require('text!../html/contentT.html');
 
-// setup templates
-var helpTemplate = requireText('../html/helpT.html'),
-	topicExcerptTemplate = requireText('../html/excerptT.html'),
-	topicTemplate = requireText('../html/contentT.html');
+module.exports = ContextualHelp;
 
+function ContextualHelp(el) {
+	const baseURL = 'https://raw.githubusercontent.com/Pearson-Higher-Ed/help-content/master/out/';
 
-function ContextualHelp(el){
-
-	var me = this,
-		baseURL = 'https://raw.githubusercontent.com/Pearson-Higher-Ed/help-content/master/out/';
-
-	function getConfig(){
-		var conf = {},
-			configEl = document.querySelector('[data-o-contextual-help-config]');
-		if (!configEl){
+	function getConfig() {
+		let conf = {};
+		const configEl = document.querySelector('[data-o-contextual-help-config]');
+		if (!configEl) {
 			return conf;
 		}
-		try{
+		try {
 			conf = JSON.parse(configEl.textContent);
 		}
-		catch(e){
+		catch(e) {
 			conf = {};
 			throw new Error('Unable to parse configuration object: invalid JSON');
 		}
 		return conf;
 	}
 
-	this.fetchHelpContent = function(contentId, cb){
-		cb = cb || function(){};
-		if(contentId.replace(/\s/,'') === ''){
-			cb("no content ID issued");
+	this.fetchHelpContent = (contentId, cb) => {
+		cb = cb || function() {};
+		if (contentId.replace(/\s/,'') === '') {
+			cb('no content ID issued');
 		}
-		if(me.cache && me.cache[contentId]){
-			cb(null, me.cache[contentId]);
+		if (this.cache && this.cache[contentId]) {
+			cb(null, this.cache[contentId]);
 			return;
 		}
 		// get it from github
-		XHR({
-			url: baseURL + me.lang + '/' + contentId + '.json',
-			onSuccess: function (req){
-				var data = JSON.parse(req.responseText);
+		xhr({
+			url: baseURL + this.lang + '/' + contentId + '.json',
+			onSuccess: (req) => {
+				const data = JSON.parse(req.responseText);
 				// if found, stick in cache
-				me.cache[contentId] = data;
+				this.cache[contentId] = data;
 				// return in cb(null, content)
 				cb(null, data);
 			},
-			onError: function (req) {
+			onError: (req) => {
 				// retry as en-us
-				if(me.lang !== me.defaultLang){
-					var tempLang = me.defaultLang;
-					XHR({
+				if(this.lang !== this.defaultLang){
+					const tempLang = this.defaultLang;
+					xhr({
 						url: baseURL + '/' + tempLang + '/' + contentId + '.json',
-						onSuccess: function(reqInner){
-							var data = JSON.parse(reqInner.responseText);
-							me.cache[contentId] = data;
+						onSuccess: (reqInner) => {
+							const data = JSON.parse(reqInner.responseText);
+							this.cache[contentId] = data;
 							cb(null, data);
 						},
-						onError: function(reqInner){
+						onError: (reqInner) => {
 							cb(reqInner);
 						}
 					});
@@ -92,37 +89,37 @@ function ContextualHelp(el){
 		el.innerHTML = helpTemplate;
 	}
 	// add event helpers for inner templates
-	el.querySelector('#contextual-help-close-content').onclick = function(){
-		me._el.classList.remove('o-contextual-help__detail--visible');
+	el.querySelector('#contextual-help-close-content').onclick = () => {
+		this._el.classList.remove('o-contextual-help__detail--visible');
 		return false;
 	};
 	// establish configuration
-	var conf = getConfig();
+	const conf = getConfig();
 	if(conf && conf.helpTopics && conf.helpTopics.length > 0){
 		this.topics = conf.helpTopics;
 	}
 	// populate excerpts into topic list
-	this.populateFromList = function(list, cb){
+	this.populateFromList = (list, cb) => {
 		cb = cb || function(){};
 		if(list.length > 0){
-			var item = list.splice(0,1)[0];
-			me.fetchHelpContent(item, function(err, cData){
+			const item = list.splice(0,1)[0];
+			this.fetchHelpContent(item, (err, cData) => {
 				if(!cData || err){
 					if(list.length > 0){
-						me.populateFromList(list, cb);
+						this.populateFromList(list, cb);
 					}
 				}
-				var nExcerpt = document.createElement('div');
+				const nExcerpt = document.createElement('div');
 				nExcerpt.innerHTML = topicExcerptTemplate;
-				var title = nExcerpt.querySelector('h4 a');
+				const title = nExcerpt.querySelector('h4 a');
 				title.innerHTML = cData.title;
-				title.onclick = function(){
-					me.openHelpTopic(item);
+				title.onclick = () => {
+					this.openHelpTopic(item);
 				};
 				nExcerpt.querySelector('p').innerHTML = cData.excerpt;
-				me._el.querySelector('.o-contextual-help__excerpt-list').appendChild(nExcerpt);
+				this._el.querySelector('.o-contextual-help__excerpt-list').appendChild(nExcerpt);
 				if(list.length > 0){
-					me.populateFromList(list, cb);
+					this.populateFromList(list, cb);
 				}
 			});
 		}
@@ -133,15 +130,17 @@ function ContextualHelp(el){
 		// remove everything
 		this._el.querySelector('.o-contextual-help__excerpt-list').innerHTML = '';
 		// populate from list
-		var theList = this.topics.slice(0);
+		const theList = this.topics.slice(0);
 		this.populateFromList(theList);
 	};
 
 	// bind header event for show / hide
-	var eventEl = document.querySelector('header.o-app-header');
+	const eventEl = document.querySelector('header.o-app-header');
 	if(eventEl){
-		eventEl.addEventListener('oAppHeader.help.toggle', function(){
-			if(me.toggle){ me.toggle(); }
+		eventEl.addEventListener('oAppHeader.help.toggle', () => {
+			if (this.toggle) {
+				this.toggle();
+			}
 		});
 	}
 
@@ -157,12 +156,12 @@ ContextualHelp.prototype.setLanguage = function(langCode){
 
 ContextualHelp.prototype.openHelpTopic = function(topic){
 
-	var contentTarget = this._el.querySelector('#o-contextual-help-topic-content-target');
-	if(!topic){
+	const contentTarget = this._el.querySelector('#o-contextual-help-topic-content-target');
+	if (!topic) {
 		contentTarget.innerHTML = '';
 	}
 	// fetch it and put the content in the content target
-	if(topic){
+	if (topic) {
 		this.fetchHelpContent(topic, function(err, cData){
 			if(err){
 				throw err;
@@ -172,13 +171,13 @@ ContextualHelp.prototype.openHelpTopic = function(topic){
 			}
 			contentTarget.innerHTML = topicTemplate;
 			contentTarget.querySelector('h4').innerHTML = cData.title;
-			var contentCT = contentTarget.querySelector('div');
+			const contentCT = contentTarget.querySelector('div');
 			contentCT.innerHTML = cData.content;
 			Collapse.init(contentCT);
 		});
 	}
 	this._el.classList.add('o-contextual-help__detail--visible');
-	if(this.open){
+	if (this.open) {
 		this.open();
 	}
 };
@@ -188,11 +187,11 @@ ContextualHelp.prototype.openHelpTopic = function(topic){
 	adds these topics to the topic list
 */
 ContextualHelp.prototype.addTopics = function(topic){
-	if(typeof topic === 'string'){
+	if (typeof topic === 'string') {
 		topic = [topic];
 	}
-	for(var i=0, l=topic.length; i<l; i++){
-		var t = topic[i];
+	for (let i=0, l=topic.length; i<l; i++) {
+		const t = topic[i];
 		if(this.topics.indexOf(t) < 0){
 			this.topics.push(t);
 		}
@@ -200,11 +199,11 @@ ContextualHelp.prototype.addTopics = function(topic){
 	this.init();
 };
 ContextualHelp.prototype.removeTopics = function(topic){
-	if(typeof topic === 'string'){
+	if (typeof topic === 'string') {
 		topic = [topic];
 	}
-	for(var i=0, l=topic.length; i<l; i++){
-		var t = topic[i];
+	for (let i=0, l=topic.length; i<l; i++) {
+		const t = topic[i];
 		if(this.topics.indexOf(t) >= 0){
 			this.topics.splice(this.topics.indexOf(t), 1);
 		}
@@ -227,4 +226,3 @@ ContextualHelp.prototype.getTopics = function(){
 	return this.topics;
 };
 
-module.exports = ContextualHelp;

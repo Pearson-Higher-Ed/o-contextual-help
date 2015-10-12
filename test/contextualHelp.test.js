@@ -1,42 +1,40 @@
 /*global describe, it*/
-'use strict';
 
-var expect = require('expect.js');
+import expect from 'expect.js';
+import ContextualHelp from '../src/js/ContextualHelp';
 
-var ContextualHelp = require('./../src/js/ContextualHelp');
+describe('ContextualHelp Init', () => {
 
-describe('ContextualHelp Init', function() {
-
-	it('should initialise', function() {
-		var ch = new ContextualHelp(document.body);
+	it('should initialise', () => {
+		const ch = new ContextualHelp(document.body);
 		expect(ch).to.not.be(null);
 	});
 
-	it('should return itself', function() {
-		var ch = new ContextualHelp(document.body);
+	it('should return itself', () => {
+		const ch = new ContextualHelp(document.body);
 		expect(ch).to.have.property('openHelpTopic');
 	});
 
-	it('should attach itself to el as .oContextualHelp', function() {
+	it('should attach itself to el as .oContextualHelp', () => {
 		new ContextualHelp(document.body);
 		expect(document.body).to.have.property('oContextualHelp');
 	});
 });
 
-describe('ContextualHelp config loader (no config)', function() {
+describe('ContextualHelp config loader (no config)', () => {
 
-	it('should not have topics if there is no config', function() {
-		var ch = new ContextualHelp(document.body);
+	it('should not have topics if there is no config', () => {
+		const ch = new ContextualHelp(document.body);
 		expect(ch.topics).to.be.an('array');
 		expect(ch.topics).to.have.length(0);
 	});
 
 });
 
-describe('ContextualHelp config loader (with config)', function() {
+describe('ContextualHelp config loader (with config)', () => {
 
-	it('should have topics if there IS a valid config', function() {
-		var demoConf = {
+	it('should have topics if there IS a valid config', () => {
+		const demoConf = {
 			"helpTopics": [
 				"console/student/freetrial",
 				"console/student/studentresources",
@@ -44,25 +42,25 @@ describe('ContextualHelp config loader (with config)', function() {
 			]
 		};
 		document.body.innerHTML = '';
-		var confEl = document.createElement('script');
+		const confEl = document.createElement('script');
 		confEl.setAttribute('type', 'application/json');
 		confEl.setAttribute('data-o-contextual-help-config');
 		confEl.innerText = JSON.stringify(demoConf);
 		document.body.appendChild(confEl);
 
-		var ct = document.createElement('div');
+		const ct = document.createElement('div');
 		document.body.appendChild(ct);
 
-		var ch = new ContextualHelp(ct);
+		const ch = new ContextualHelp(ct);
 		expect(ch.topics).to.be.an('array');
 		expect(ch.topics).to.have.length(3);
 	});
 });
 
-describe('ContextualHelp direct loader', function() {
-	it('should open specific contents', function() {
-		var ch = new ContextualHelp(document.body);
-		var testCache = {
+describe('ContextualHelp direct loader', () => {
+	it('should open specific contents', () => {
+		const ch = new ContextualHelp(document.body);
+		const testCache = {
 			title: 'test content',
 			excerpt: 'lorem ipsum',
 			content: '<p>Lorem Ipsum dolar sit amet.</p>'
@@ -71,41 +69,41 @@ describe('ContextualHelp direct loader', function() {
 			test: testCache
 		};
 		ch.openHelpTopic('test');
-		var titleText = document.querySelector('#o-contextual-help-topic-content-target h4').innerText;
+		const titleText = document.querySelector('#o-contextual-help-topic-content-target h4').innerText;
 		expect(titleText).to.be(testCache.title);
-		var content = document.querySelector('#o-contextual-help-topic-content-target div').innerHTML;
+		const content = document.querySelector('#o-contextual-help-topic-content-target div').innerHTML;
 		expect(content).to.be(testCache.content);
 	});
 });
 
-describe('ContextualHelp add/remove topics', function() {
-	var fakeHelp = {
+describe('ContextualHelp add/remove topics', () => {
+	const fakeHelp = {
 		title: 'Fake Content',
 		excerpt: 'This is the fake content for the test.',
 		content: '<p>This is fake.</p>'
 	};
-	var fakeHelp2 = {
+	const fakeHelp2 = {
 		title: 'Fake Content 2',
 		excerpt: 'This is the fake content for the test, second.',
 		content: '<p>This is also fake.</p>'
 	};
-	it('should add topics to the cache', function(){
+	it('should add topics to the cache', () => {
 
-		var ch = new ContextualHelp(document.body);
+		const ch = new ContextualHelp(document.body);
 		ch.cache = {
 			fake: fakeHelp
 		};
 		ch.addTopics('fake');
 		expect(ch.topics).to.contain('fake');
 		ch.openHelpTopic('fake');
-		var titleText = document.querySelector('#o-contextual-help-topic-content-target h4').innerText;
+		const titleText = document.querySelector('#o-contextual-help-topic-content-target h4').innerText;
 		expect(titleText).to.be(fakeHelp.title);
-		var content = document.querySelector('#o-contextual-help-topic-content-target div').innerHTML;
+		const content = document.querySelector('#o-contextual-help-topic-content-target div').innerHTML;
 		expect(content).to.be(fakeHelp.content);
 	});
 
-	it('removeAllTopics() should empty the topics list', function(){
-		var ch = new ContextualHelp(document.body);
+	it('removeAllTopics() should empty the topics list', () => {
+		const ch = new ContextualHelp(document.body);
 		ch.cache = {
 			fake: fakeHelp,
 			fake2: fakeHelp2
@@ -117,8 +115,8 @@ describe('ContextualHelp add/remove topics', function() {
 		expect(ch.topics).to.have.length(0);
 	});
 
-	it('removeTopics() should remove topic from list by name', function(){
-		var ch = new ContextualHelp(document.body);
+	it('removeTopics() should remove topic from list by name', () => {
+		const ch = new ContextualHelp(document.body);
 		ch.cache = {
 			fake: fakeHelp,
 			fake2: fakeHelp2
@@ -132,20 +130,20 @@ describe('ContextualHelp add/remove topics', function() {
 	});
 });
 
-describe('setLanguage()', function(){
-	it('should change the language code', function(){
-		var ch = new ContextualHelp(document.body);
+describe('setLanguage()', () => {
+	it('should change the language code', () => {
+		const ch = new ContextualHelp(document.body);
 		expect(ch.lang).to.be('en-us');
 		ch.setLanguage('ru');
 		expect(ch.lang).to.be('ru');
 	});
 });
 
-describe('side effects', function(){
-	it('should clear out the content if no id is passed to open', function(){
-		var ch = new ContextualHelp(document.body);
+describe('side effects', () => {
+	it('should clear out the content if no id is passed to open', () => {
+		const ch = new ContextualHelp(document.body);
 		ch.openHelpTopic();
-		var newContent = ch._el.querySelector('#o-contextual-help-topic-content-target').innerHTML;
+		const newContent = ch._el.querySelector('#o-contextual-help-topic-content-target').innerHTML;
 		expect(newContent).to.be('');
 	});
 });

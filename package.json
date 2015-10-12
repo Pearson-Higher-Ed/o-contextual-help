@@ -1,23 +1,30 @@
 {
   "private": true,
   "name": "o-contextual-help",
-  "version": "1.0.1",
+  "version": "2.0.0-wip",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+    "test": "./node_modules/karma/bin/karma start karma.conf.js",
+    "coverage": "COVERAGE=1 ./node_modules/karma/bin/karma start karma.conf.js"
   },
   "devDependencies": {
-    "babelify": "^5.0.4",
-    "browserify": "^11.1.0",
-    "browserify-istanbul": "^0.2.1",
+    "babel-core": "^5.8.25",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.25",
+    "bower-webpack-plugin": "^0.1.9",
     "coveralls": "^2.11.4",
-    "debowerify": "Financial-Times/debowerify",
     "expect.js": "^0.3.1",
-    "karma": "^0.12.31",
-    "karma-browserify": "^4.0.0",
-    "karma-coverage": "^0.2.6",
+    "imports-loader": "^0.6.4",
+    "isparta-loader": "^1.0.0",
+    "karma": "^0.13.0",
+    "karma-coverage": "^0.5.2",
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon": "^1.0.4",
+    "karma-sourcemap-loader": "^0.3.5",
+    "karma-webpack": "^1.7.0",
     "mocha": "^2.1.0",
-    "textrequireify": "^2.1.1"
+    "origami-build-tools": "^4.1.0",
+    "sinon": "^1.17.1",
+    "webpack": "^1.12.2"
   }
 }

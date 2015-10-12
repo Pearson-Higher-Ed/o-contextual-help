@@ -1,12 +1,17 @@
-/*global module, process */
-'use strict';
+/*eslint-env node*/
+/*eslint strict:0*/
 
-module.exports = function(config) {
-	config.set({
+const BowerPlugin = require('bower-webpack-plugin');
+const path = require('path');
 
-		client: {
-			captureConsole: true
-		},
+module.exports = (config) => {
+	'use strict';
+
+	const cwd = process.cwd();
+	const textrequireifyPath =
+		path.join(__dirname, './node_modules/origami-build-tools/lib/plugins/textrequireify-loader.js');
+
+	const settings = {
 
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: '',
@@ -14,57 +19,88 @@ module.exports = function(config) {
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-		frameworks: ['mocha', 'browserify'],
+		frameworks: ['mocha', 'sinon'],
+
+
+		// list of plugins
+		plugins: [
+			'karma-coverage',
+			'karma-mocha',
+			'karma-phantomjs-launcher',
+			'karma-sinon',
+			'karma-sourcemap-loader',
+			'karma-webpack'
+		],
 
 
 		// list of files / patterns to load in the browser
 		files: [
-		// Polyfill PhantomJS as it's a similar Webkit version
-		'http://polyfill.webservices.ft.com/v1/polyfill.js?ua=safari/4',
-		'test/*.test.js'
+			'http://polyfill.webservices.ft.com/v1/polyfill.js?ua=safari/4',
+			'test/*.test.js'
 		],
 
 
 		// list of files to exclude
-		exclude: [
-		],
+		exclude: [],
 
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors: {
-			'test/*.test.js': ['browserify']
+			'test/*.js': ['webpack', 'sourcemap']
 		},
 
 
-		// browserify preprocessor options
-		browserify: {
-			debug: true,
-			transform: [
-				'debowerify',
-				require('browserify-istanbul')({
-					ignore: ['node_modules/**', 'test/**']
-				}),
-				require('textrequireify').create({
-					rootDirectory: process.cwd()
-				})]
+		// webpack preprocessor options
+		webpack: {
+			quiet: true,
+			module: {
+				preLoaders: [
+					{
+						test: /\.js$/,
+						exclude: /node_modules|test/,
+						loaders: [textrequireifyPath + '?cwd=' + cwd]
+					}
+				],
+				loaders: [
+					{
+						test: /\.js$/,
+						exclude: /node_modules/,
+						loaders: [
+							// Disables AMD module loading
+							'imports?define=>false',
+							'babel?optional[]=runtime'
+						]
+					}
+				]
+			},
+			resolve: {
+				root: [path.join(cwd, 'bower_components')]
+			},
+			resolveLoader: {
+				alias: {
+					'textrequireify-loader': path.join(__dirname, './node_modules/origami-build-tools/lib/plugins/textrequireify-loader')
+				}
+			},
+			plugins: [
+				new BowerPlugin({
+					includes:  /\.js$/
+				})
+			],
+			devtool: 'inline-source-map'
+		},
+
+
+		// Hide webpack output logging
+		webpackMiddleware: {
+			noInfo: true
 		},
 
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
-		reporters: ['progress', 'coverage'],
-
-
-		// coverage reporter options
-		coverageReporter: {
-			dir : 'build/reports/coverage',
-			reporters: [
-			{ type: 'lcovonly', subdir: '.', file:'coverage.lcov' },
-			{ type: 'html', subdir: 'report-html' }
-			]
-		},
+		reporters: ['progress'],
 
 
 		// web server port
@@ -93,5 +129,31 @@ module.exports = function(config) {
 		// if true, Karma captures browsers, runs the tests and exits
 		singleRun: true
 
-	});
+	};
+
+	if (process.env.COVERAGE) {
+		const webpackModuleSettings = settings.webpack.module;
+
+		settings.reporters = (settings.reporters || []).concat(['coverage']);
+
+		settings.coverageReporter = {
+			dir: 'build/reports/coverage',
+			reporters: [
+				{ type: 'lcovonly', subdir: '.', file: 'coverage.lcov' },
+				{ type: 'html', subdir: 'report-html' }
+			]
+		};
+
+		webpackModuleSettings.loaders =
+			(webpackModuleSettings.loaders || []).concat([
+				{
+                    test: /\.js$/,
+                    // include: path.resolve('src/js/'),
+                    exclude: /(test|node_modules|bower_components)/,
+                    loader: 'isparta'
+                }
+			]);
+	}
+
+	config.set(settings);
 };
