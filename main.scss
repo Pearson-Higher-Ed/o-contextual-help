@@ -24,7 +24,13 @@
 	@media only screen and (max-width: 415px) {
 		width: 100%;
 		right: -100%;
-
+		&.o-drawer.o-drawer-right {
+			width: 100%;
+			right: -100%;
+			&.o-drawer-open {
+				right: 0%;
+			}
+		}
 	}
 }
 
