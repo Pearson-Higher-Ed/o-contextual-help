@@ -24,6 +24,9 @@ This module will automatically inject and initialize itself on the page, as a ne
 document.getElementById('o-contextual-help-drawer').oContextualHelp;
 ```
 
+## Initialization
+This module will automaticall initialize when o.DOMContentLoaded fires.  It can be manually initialized with the static `init()` method.
+
 ## API
 
 ### Methods

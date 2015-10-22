@@ -15,6 +15,7 @@ var startContextualHelp = function () {
 	container.id = 'o-contextual-help-drawer';
 	container.setAttribute('data-o-component', 'o-drawer');
 	container.setAttribute('aria-role', 'menu');
+	container.setAttribute('aria-expanded', 'false');
 	container.setAttribute('role', 'menu');
 	container.classList.add('o-drawer-right', 'o-drawer-animated', 'o-contextual-help__drawer');
 	var par = document.getElementsByTagName("body")[0];
