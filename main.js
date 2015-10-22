@@ -36,4 +36,6 @@ var startContextualHelp = function () {
 
 document.addEventListener('o.DOMContentLoaded', startContextualHelp);
 
+ContextualHelp.init = startContextualHelp;
+
 module.exports = ContextualHelp;

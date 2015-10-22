@@ -99,6 +99,19 @@
     help.cache.accordion = testContent;
     help.openHelpTopic('accordion');
   }
+
+  function signinTest(){
+    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
+    help.removeAllTopics();
+    var newTopics = [
+      'console/instructor/validationtime',
+      'console/instructor/validatedinstructor',
+      'console/instructor/courseregsettings',
+      'console/instructor/educatorresources',
+      'console/instructor/contactsupport'
+    ];
+    help.addTopics(newTopics);
+  }
 </script>
 
 <header class="o-app-header"></header>
@@ -133,6 +146,10 @@
 <br/><br/>
 
 <a href="#" onclick="testAccordion()">Test Accordion Content</a>
+
+<br/><br/>
+
+<a href="#" onclick="signinTest()">Test Signin Content Swap</a>
 
 <script src="/bundles/js?modules=o-contextual-help:/demos/src/demo.js"></script>
 <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>

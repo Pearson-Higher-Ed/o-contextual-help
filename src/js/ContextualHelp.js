@@ -135,6 +135,7 @@ function ContextualHelp(el){
 		// populate from list
 		var theList = this.topics.slice(0);
 		this.populateFromList(theList);
+		return;
 	};
 
 	// bind header event for show / hide
@@ -218,6 +219,7 @@ removes all topics from current config
 ContextualHelp.prototype.removeAllTopics = function(){
 	this.topics = [];
 	this.init();
+	return;
 };
 
 /*
