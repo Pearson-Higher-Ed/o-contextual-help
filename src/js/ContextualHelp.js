@@ -146,9 +146,19 @@ function ContextualHelp(el){
 		});
 	}
 
-	this.init();
+	this.scheduleInit();
 	this._el.oContextualHelp = this;
 	return this;
+}
+
+ContextualHelp.prototype.scheduleInit = function(){
+	var me = this;
+	if(this._initTimeing){
+		clearTimeout(this._initTimeing);
+	}
+	this._initTimeing = setTimeout(function(){
+		me.init();
+	}, 150);
 }
 
 ContextualHelp.prototype.deDupeTopics = function(){
@@ -206,7 +216,7 @@ ContextualHelp.prototype.addTopics = function(topic){
 			this.topics.push(t);
 		}
 	}
-	this.init();
+	this.scheduleInit();
 };
 ContextualHelp.prototype.removeTopics = function(topic){
 	if(typeof topic === 'string'){
@@ -218,7 +228,7 @@ ContextualHelp.prototype.removeTopics = function(topic){
 			this.topics.splice(this.topics.indexOf(t), 1);
 		}
 	}
-	this.init();
+	this.scheduleInit();
 };
 
 /*
@@ -226,7 +236,7 @@ removes all topics from current config
 */
 ContextualHelp.prototype.removeAllTopics = function(){
 	this.topics.splice(0,this.topics.length);
-	this.init();
+	this.scheduleInit();
 	return;
 };
 
