@@ -217,7 +217,7 @@ ContextualHelp.prototype.removeTopics = function(topic){
 removes all topics from current config
 */
 ContextualHelp.prototype.removeAllTopics = function(){
-	this.topics = [];
+	this.topics.splice(0,this.topics.length);
 	this.init();
 	return;
 };
