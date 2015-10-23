@@ -133,7 +133,7 @@ function ContextualHelp(el){
 		// remove everything
 		this._el.querySelector('.o-contextual-help__excerpt-list').innerHTML = '';
 		// populate from list
-		var theList = this.topics.slice(0);
+		var theList = this.deDupeTopics();
 		this.populateFromList(theList);
 		return;
 	};
@@ -149,6 +149,14 @@ function ContextualHelp(el){
 	this.init();
 	this._el.oContextualHelp = this;
 	return this;
+}
+
+ContextualHelp.prototype.deDupeTopics = function(){
+	var arr = this.topics;
+	var t = arr.filter(function(item, pos){
+		return arr.indexOf(item) == pos;
+	});
+	return t;
 }
 
 ContextualHelp.prototype.setLanguage = function(langCode){
