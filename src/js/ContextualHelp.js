@@ -129,6 +129,9 @@ function ContextualHelp(el){
 				}
 			});
 		}
+		else{
+			cb();
+		}
 	};
 
 	this._initRunning = false;
@@ -259,4 +262,3 @@ function ContextualHelp(el){
 	};
 
 	module.exports = ContextualHelp;
-	
