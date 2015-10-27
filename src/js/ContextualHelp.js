@@ -1,22 +1,22 @@
 'use strict';
 
 var XHR = require('o-xhr'),
-	Collapse = require('o-collapse');
+Collapse = require('o-collapse');
 
 // setup templates
 var helpTemplate = requireText('../html/helpT.html'),
-	topicExcerptTemplate = requireText('../html/excerptT.html'),
-	topicTemplate = requireText('../html/contentT.html');
+topicExcerptTemplate = requireText('../html/excerptT.html'),
+topicTemplate = requireText('../html/contentT.html');
 
 
 function ContextualHelp(el){
 
 	var me = this,
-		baseURL = 'https://raw.githubusercontent.com/Pearson-Higher-Ed/help-content/master/out/';
+	baseURL = 'https://raw.githubusercontent.com/Pearson-Higher-Ed/help-content/master/out/';
 
 	function getConfig(){
 		var conf = {},
-			configEl = document.querySelector('[data-o-contextual-help-config]');
+		configEl = document.querySelector('[data-o-contextual-help-config]');
 		if (!configEl){
 			return conf;
 		}
@@ -124,17 +124,29 @@ function ContextualHelp(el){
 				if(list.length > 0){
 					me.populateFromList(list, cb);
 				}
+				else{
+					cb();
+				}
 			});
 		}
 	};
 
-	this.init = function(){
+	this._initRunning = false;
+	this._rerunInit = false;
 
+	this.init = function(){
+		this._initRunning = true;
 		// remove everything
 		this._el.querySelector('.o-contextual-help__excerpt-list').innerHTML = '';
 		// populate from list
 		var theList = this.deDupeTopics();
-		this.populateFromList(theList);
+		this.populateFromList(theList, function(){
+			me._initRunning = false;
+			if(me._rerunInit){
+				me._rerunInit = false;
+				me.init();
+			}
+		});
 		return;
 	};
 
@@ -143,108 +155,108 @@ function ContextualHelp(el){
 	if(eventEl){
 		eventEl.addEventListener('oAppHeader.help.toggle', function(){
 			if(me.toggle){ me.toggle(); }
+			});
+		}
+
+		this.scheduleInit();
+		this._el.oContextualHelp = this;
+		return this;
+	}
+
+	ContextualHelp.prototype.scheduleInit = function(){
+		if(!this._initRunning){
+			this.init();
+		}
+		else{
+			this._rerunInit = true;
+		}
+	}
+
+	ContextualHelp.prototype.deDupeTopics = function(){
+		var arr = this.topics;
+		var t = arr.filter(function(item, pos){
+			return arr.indexOf(item) == pos;
 		});
+		return t;
 	}
 
-	this.scheduleInit();
-	this._el.oContextualHelp = this;
-	return this;
-}
+	ContextualHelp.prototype.setLanguage = function(langCode){
+		this.lang = langCode;
+		this._el.classList.add('o-contextual-help__detail--visible');
+	};
 
-ContextualHelp.prototype.scheduleInit = function(){
-	var me = this;
-	if(this._initTimeing){
-		clearTimeout(this._initTimeing);
-	}
-	this._initTimeing = setTimeout(function(){
-		me.init();
-	}, 150);
-}
+	ContextualHelp.prototype.openHelpTopic = function(topic){
 
-ContextualHelp.prototype.deDupeTopics = function(){
-	var arr = this.topics;
-	var t = arr.filter(function(item, pos){
-		return arr.indexOf(item) == pos;
-	});
-	return t;
-}
+		var contentTarget = this._el.querySelector('#o-contextual-help-topic-content-target');
+		if(!topic){
+			contentTarget.innerHTML = '';
+		}
+		// fetch it and put the content in the content target
+		if(topic){
+			this.fetchHelpContent(topic, function(err, cData){
+				if(err){
+					throw err;
+				}
+				if(!cData){
+					return;
+				}
+				contentTarget.innerHTML = topicTemplate;
+				contentTarget.querySelector('h4').innerHTML = cData.title;
+				var contentCT = contentTarget.querySelector('div');
+				contentCT.innerHTML = cData.content;
+				Collapse.init(contentCT);
+			});
+		}
+		this._el.classList.add('o-contextual-help__detail--visible');
+		if(this.open){
+			this.open();
+		}
+	};
 
-ContextualHelp.prototype.setLanguage = function(langCode){
-	this.lang = langCode;
-	this._el.classList.add('o-contextual-help__detail--visible');
-};
-
-ContextualHelp.prototype.openHelpTopic = function(topic){
-
-	var contentTarget = this._el.querySelector('#o-contextual-help-topic-content-target');
-	if(!topic){
-		contentTarget.innerHTML = '';
-	}
-	// fetch it and put the content in the content target
-	if(topic){
-		this.fetchHelpContent(topic, function(err, cData){
-			if(err){
-				throw err;
-			}
-			if(!cData){
-				return;
-			}
-			contentTarget.innerHTML = topicTemplate;
-			contentTarget.querySelector('h4').innerHTML = cData.title;
-			var contentCT = contentTarget.querySelector('div');
-			contentCT.innerHTML = cData.content;
-			Collapse.init(contentCT);
-		});
-	}
-	this._el.classList.add('o-contextual-help__detail--visible');
-	if(this.open){
-		this.open();
-	}
-};
-
-/*
+	/*
 	takes string topic or array of strings
 	adds these topics to the topic list
-*/
-ContextualHelp.prototype.addTopics = function(topic){
-	if(typeof topic === 'string'){
-		topic = [topic];
-	}
-	for(var i=0, l=topic.length; i<l; i++){
-		var t = topic[i];
-		if(this.topics.indexOf(t) < 0){
-			this.topics.push(t);
+	*/
+	ContextualHelp.prototype.addTopics = function(topic){
+		if(typeof topic === 'string'){
+			topic = [topic];
 		}
-	}
-	this.scheduleInit();
-};
-ContextualHelp.prototype.removeTopics = function(topic){
-	if(typeof topic === 'string'){
-		topic = [topic];
-	}
-	for(var i=0, l=topic.length; i<l; i++){
-		var t = topic[i];
-		if(this.topics.indexOf(t) >= 0){
-			this.topics.splice(this.topics.indexOf(t), 1);
+		for(var i=0, l=topic.length; i<l; i++){
+			var t = topic[i];
+			if(this.topics.indexOf(t) < 0){
+				this.topics.push(t);
+			}
 		}
-	}
-	this.scheduleInit();
-};
+		this.scheduleInit();
+	};
+	ContextualHelp.prototype.removeTopics = function(topic){
+		if(typeof topic === 'string'){
+			topic = [topic];
+		}
+		for(var i=0, l=topic.length; i<l; i++){
+			var t = topic[i];
+			if(this.topics.indexOf(t) >= 0){
+				this.topics.splice(this.topics.indexOf(t), 1);
+			}
+		}
+		this.scheduleInit();
+	};
 
-/*
-removes all topics from current config
-*/
-ContextualHelp.prototype.removeAllTopics = function(){
-	this.topics.splice(0,this.topics.length);
-	this.scheduleInit();
-	return;
-};
+	/*
+	removes all topics from current config
+	*/
+	ContextualHelp.prototype.removeAllTopics = function(){
+		this.topics.splice(0,this.topics.length);
+		this.scheduleInit();
+		return;
+	};
 
-/*
+	/*
 	returns list of all topics corruntly in use
-*/
-ContextualHelp.prototype.getTopics = function(){
-	return this.topics;
-};
+	*/
+	ContextualHelp.prototype.getTopics = function(){
+		return this.topics;
+	};
 
-module.exports = ContextualHelp;
+	module.exports = ContextualHelp;
+	
