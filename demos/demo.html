@@ -22,97 +22,6 @@
     ]
   }
 </script>
-<script>
-  var testContent = {
-    title: 'Test Accordion',
-    excerpt: 'A test of the accordion for content.',
-    content: '	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-1"				data-parent="#accordion">Item 1</h5>		</div>		<div class="demo-panel-body">			<p id="item-1" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-2"				data-parent="#accordion">Item 2</h5>		</div>		<div class="demo-panel-body">			<p id="item-2" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-3"				data-parent="#accordion">Item 3</h5>		</div>		<div class="demo-panel-body">			<p id="item-3" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-4"				data-parent="#accordion">Item 4</h5>		</div>		<div class="demo-panel-body">			<p id="item-4" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>'
-  };
-  function getAndConsoleLogHelp(){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    console.log(help);
-  }
-
-  function openSpecificArticle(topic){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.openHelpTopic(topic);
-  }
-
-  function issueHelpClickFromHeader(){
-    var el = document.querySelector('.o-app-header');
-    // now make it emit and oAppHeader.help.toggle
-    if(document.createEvent && el.dispatchEvent){
-      var evt = document.createEvent('Event');
-      evt.initEvent('oAppHeader.help.toggle', true, true)
-      el.dispatchEvent(evt);
-    }
-  }
-
-  function openThenAddATopicsAfterTime(topics, delay){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.open();
-    setTimeout(function(){
-      help.addTopics(topics)
-    }, delay);
-  }
-
-  function openThenRemoveTopics(topics, delay){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.open();
-    setTimeout(function(){
-      help.removeTopics(topics)
-    }, delay);
-  }
-
-  function openThenRemoveAll(){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.open();
-    setTimeout(function(){
-      help.removeAllTopics()
-    }, 500);
-  }
-
-  function openAndRandomSort(){
-    if(window.loop){
-      clearInterval(window.loop);
-    }
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.open();
-    function rndSort(){
-      var ts = help.getTopics();
-      ts.sort(function(){
-        return Math.floor(Math.random()*3) - 1;
-      });
-      help.removeAllTopics();
-      help.addTopics(ts);
-    }
-    setTimeout(function(){
-      window.loop = setInterval(rndSort, 300);
-    }, 500);
-    setTimeout(function(){
-      clearInterval(window.loop);
-    }, 5500);
-  }
-
-  function testAccordion(){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.cache.accordion = testContent;
-    help.openHelpTopic('accordion');
-  }
-
-  function signinTest(){
-    var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
-    help.removeAllTopics();
-    var newTopics = [
-      'console/instructor/validationtime',
-      'console/instructor/validatedinstructor',
-      'console/instructor/courseregsettings',
-      'console/instructor/educatorresources',
-      'console/instructor/contactsupport'
-    ];
-    help.addTopics(newTopics);
-  }
-</script>
 
 <header class="o-app-header"></header>
 
@@ -150,6 +59,13 @@
 <br/><br/>
 
 <a href="#" onclick="signinTest()">Test Signin Content Swap</a>
+
+<br/><br/>
+<h4>Test Your Content</h4>
+<div id="secret-dom" style="display: none;"></div>
+<textarea id="custom-content" cols="120" rows="15" placeholder="Paste Your Content Here"></textarea>
+<br/>
+<button onclick="testCustomContent()">Test This Content</button>
 
 <script src="/bundles/js?modules=o-contextual-help:/demos/src/demo.js"></script>
 <script src="//registry.origami.ft.com/embedapi?autoload=resize"></script>
