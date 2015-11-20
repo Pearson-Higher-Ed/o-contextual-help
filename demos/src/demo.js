@@ -15,17 +15,17 @@ var testContent = {
 	excerpt: 'A test of the accordion for content.',
 	content: '	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-1"				data-parent="#accordion">Item 1</h5>		</div>		<div class="demo-panel-body">			<p id="item-1" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-2"				data-parent="#accordion">Item 2</h5>		</div>		<div class="demo-panel-body">			<p id="item-2" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-3"				data-parent="#accordion">Item 3</h5>		</div>		<div class="demo-panel-body">			<p id="item-3" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>	<div class="demo-panel">		<div class="demo-panel-heading">			<h5 data-toggle="o-collapse"				data-target="#item-4"				data-parent="#accordion">Item 4</h5>		</div>		<div class="demo-panel-body">			<p id="item-4" class="o-collapse">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>		</div>	</div>'
 };
-function getAndConsoleLogHelp(){
+window.getAndConsoleLogHelp = function(){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	console.log(help);
 }
 
-function openSpecificArticle(topic){
+window.openSpecificArticle = function(topic){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	help.openHelpTopic(topic);
 }
 
-function issueHelpClickFromHeader(){
+window.issueHelpClickFromHeader = function(){
 	var el = document.querySelector('.o-app-header');
 	// now make it emit and oAppHeader.help.toggle
 	if(document.createEvent && el.dispatchEvent){
@@ -35,7 +35,7 @@ function issueHelpClickFromHeader(){
 	}
 }
 
-function openThenAddATopicsAfterTime(topics, delay){
+window.openThenAddATopicsAfterTime = function(topics, delay){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	help.open();
 	setTimeout(function(){
@@ -43,7 +43,7 @@ function openThenAddATopicsAfterTime(topics, delay){
 	}, delay);
 }
 
-function openThenRemoveTopics(topics, delay){
+window.openThenRemoveTopics = function(topics, delay){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	help.open();
 	setTimeout(function(){
@@ -51,7 +51,7 @@ function openThenRemoveTopics(topics, delay){
 	}, delay);
 }
 
-function openThenRemoveAll(){
+window.openThenRemoveAll = function(){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	help.open();
 	setTimeout(function(){
@@ -59,7 +59,7 @@ function openThenRemoveAll(){
 	}, 500);
 }
 
-function openAndRandomSort(){
+window.openAndRandomSort = function(){
 	if(window.loop){
 		clearInterval(window.loop);
 	}
@@ -81,13 +81,13 @@ function openAndRandomSort(){
 	}, 5500);
 }
 
-function testAccordion(){
+window.testAccordion = function(){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	help.cache.accordion = testContent;
 	help.openHelpTopic('accordion');
 }
 
-function signinTest(){
+window.signinTest = function(){
 	var help = document.getElementById('o-contextual-help-drawer').oContextualHelp;
 	help.removeAllTopics();
 	var newTopics = [
