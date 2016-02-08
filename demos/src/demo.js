@@ -1,10 +1,6 @@
 /*global require*/
 require('../../main');
 
-var sani = require('sanitize-html'),
-	whitelistTags = ['a',  'abbr',  'acronym',  'address',  'article',  'aside',  'b',  'blockquote',  'caption',  'code',  'div',  'dl',  'dt',  'em',  'figcaption',  'figure',  'h1',  'h2',  'h3',  'h4',  'h5',  'h6',  'hr',  'i',  'img',  'ins',  'li',  'map',  'meter',  'nav',  'ol',  'output',  'p',  'pre',  'q',  's',  'section',  'small',  'span',  'strong',  'sub',  'sup',  'table',  'tbody',  'td',  'tfoot',  'th',  'thead',  'time',  'tr',  'u',  'ul',  'var',  'wbr'],
-	saniOpts = {allowedTags: whitelistTags};
-
 document.addEventListener("DOMContentLoaded", function() {
 	"use strict";
 	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
@@ -113,15 +109,15 @@ window.testCustomContent = function(){
 	var titleEl = secretDOM.getElementsByTagName('h1');
 	if(titleEl && titleEl.length > 0){
 		titleEl = titleEl[0];
-		data.title = sani(titleEl.innerHTML, saniOpts);
+		data.title = titleEl.innerHTML;
 		titleEl.parentNode.removeChild(titleEl);
-		data.content = sani(secretDOM.innerHTML, saniOpts);
+		data.content = secretDOM.innerHTML;
 	}
 	var contentWords = [];
 	var contentParagraphs = secretDOM.querySelectorAll('p');
 	for(var i=0, l=contentParagraphs.length; i<l; i++){
 		var para = contentParagraphs[i];
-		var words = sani(para.innerHTML, {allowedTags: []}). split(' ');
+		var words = para.innerHTML.split(' ');
 		contentWords.push(words);
 	}
 	contentWords.forEach(function(w){
