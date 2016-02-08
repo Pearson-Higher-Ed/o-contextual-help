@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+    <head>
+
+    </head>
+    <body>
+             <h1>Can I extend my Free Trial?</h1>
+            <p>Free trials cannot be extended. When your free trial period ends, you will be prompted to either enter a prepaid product access code purchased from the campus bookstore or pay by credit card or PayPal the next time you enter your course.            </p>
+            <p>Keep in mind, the day you receive the course invitation link from your instructor may not be the course start date. Some students choose to try the  free trial on the first day of class; however, joining your instructor's course as soon as you recieve your Course Invite link gives you time to get settled in and explore.</p>
+</body>
+</html>
